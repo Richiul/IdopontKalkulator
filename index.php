@@ -107,19 +107,15 @@ function CalculateDueDate($startDateTime, $hours)
     if($hours < 1 )
         return "Atfutasi ido nagyobb kell legyen 0-nal";
 
-    // Calculate the number of days and hours
     $days = floor($hours / 8);
     $remainingHours = $hours % 8;
 
-    // Add days and hours to the start date and time
     $dueDateTime = $startDateTime;
     $dueDateTime->modify("+$days weekdays");
 
-    // Calculate the remaining working hours
     $remainingWorkingHours = 8 - (int)$startDateTime->format('H');
     $dueDateTime->modify("+$remainingWorkingHours hours");
 
-    // Adjust the due date and time within working hours
     while ($remainingHours >= 8) {
         $dueDateTime->modify('+1 weekdays');
         $remainingHours -= 8;
@@ -127,14 +123,13 @@ function CalculateDueDate($startDateTime, $hours)
 
     $dueDateTime->modify("+$remainingHours hours");
 
-    // Ensure the due time is between 09:00 AM and 05:00 PM
     if ($dueDateTime->format('H') < 9) {
         $dueDateTime->setTime(9, 0);
     } elseif ($dueDateTime->format('H') >= 17) {
         $dueDateTime->modify('+1 weekdays')->setTime(9, 0);
     }
 
-    return "Task will be finished on : ".$dueDateTime->format('Y-m-d H:i A');
+    return "Feladat vege : ".$dueDateTime->format('Y-m-d H:i A');
 }
 
 
